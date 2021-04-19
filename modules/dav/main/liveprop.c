@@ -50,7 +50,7 @@ static void dav_register_liveprop_namespace(apr_pool_t *p, const char *uri)
 
     /* start at 1, and count up */
     apr_hash_set(dav_liveprop_uris, uri, APR_HASH_KEY_STRING,
-                 (void *)++dav_liveprop_count);
+                 (void *)(apr_intptr_t)++dav_liveprop_count);
 }
 
 DAV_DECLARE(long) dav_get_liveprop_ns_index(const char *uri)

@@ -2096,7 +2096,7 @@ static dav_error *dav_fs_patch_validate(const dav_resource *resource,
                              "submitted is invalid.");
     }
 
-    *context = (void *)((long)(value == 'T'));
+    *context = (void *)((apr_intptr_t)(value == 'T'));
 
     return NULL;
 
@@ -2114,10 +2114,10 @@ static dav_error *dav_fs_patch_exec(const dav_resource *resource,
                                     void *context,
                                     dav_liveprop_rollback **rollback_ctx)
 {
-    long value = context != NULL;
+    apr_intptr_t value = context != NULL;
     apr_fileperms_t perms = resource->info->finfo.protection;
     apr_status_t status;
-    long old_value = (perms & APR_UEXECUTE) != 0;
+    apr_intptr_t old_value = (perms & APR_UEXECUTE) != 0;
 
     /* assert: prop == executable. operation == SET. */
 

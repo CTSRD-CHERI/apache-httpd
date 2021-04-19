@@ -474,7 +474,7 @@ static dav_error * dav_propdb_open(apr_pool_t *pool,
             /* we must copy the key, in case ns_table.buf moves */
             apr_hash_set(db->uri_index,
                          apr_pstrdup(pool, uri), APR_HASH_KEY_STRING,
-                         (void *)ns);
+                         (void *)(apr_intptr_t)ns);
         }
     }
 
@@ -596,7 +596,7 @@ static dav_error * dav_propdb_map_namespaces(
             /* copy the uri in case the passed-in namespaces changes in
                some way. */
             apr_hash_set(db->uri_index, apr_pstrdup(db->pool, uri), uri_len,
-                         (void *)((long)(db->ns_count + 1)));
+                         (void *)((apr_intptr_t)(db->ns_count + 1)));
 
             db->ns_table_dirty = 1;
 
