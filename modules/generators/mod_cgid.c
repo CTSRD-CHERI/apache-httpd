@@ -661,7 +661,7 @@ static int cgid_server(void *data)
         }
     }
 
-    apr_pool_cleanup_register(pcgi, (void *)((long)sd),
+    apr_pool_cleanup_register(pcgi, (void *)((apr_intptr_t)sd),
                               close_unix_socket, close_unix_socket);
 
     /* if running as root, switch to configured user/group */
@@ -862,7 +862,7 @@ static int cgid_server(void *data)
             key = apr_pmemdup(pcgi, &cgid_req.conn_id, sizeof(cgid_req.conn_id));
         }
         apr_hash_set(script_hash, key, sizeof(cgid_req.conn_id),
-                     (void *)((long)procnew->pid));
+                     (void *)((apr_intptr_t)procnew->pid));
     }
     return -1; /* should be <= 0 to distinguish from startup errors */
 }
@@ -1247,7 +1247,7 @@ static int connect_to_daemon(int *sdptr, request_rec *r,
             }
         }
         else {
-            apr_pool_cleanup_register(r->pool, (void *)((long)sd),
+            apr_pool_cleanup_register(r->pool, (void *)((apr_intptr_t)sd),
                                       close_unix_socket, apr_pool_cleanup_null);
             break; /* we got connected! */
         }
@@ -1512,7 +1512,7 @@ static int cgid_handler(request_rec *r)
     else { 
         apr_file_pipe_timeout_set(tempsock, r->server->timeout);
     }
-    apr_pool_cleanup_kill(r->pool, (void *)((long)sd), close_unix_socket);
+    apr_pool_cleanup_kill(r->pool, (void *)((apr_intptr_t)sd), close_unix_socket);
 
     /* Transfer any put/post args, CERN style...
      * Note that we already ignore SIGPIPE in the core server.
@@ -1863,7 +1863,7 @@ static int include_cmd(include_ctx_t *ctx, ap_filter_t *f,
         apr_file_pipe_timeout_set(tempsock, r->server->timeout);
     }
 
-    apr_pool_cleanup_kill(r->pool, (void *)((long)sd), close_unix_socket);
+    apr_pool_cleanup_kill(r->pool, (void *)((apr_intptr_t)sd), close_unix_socket);
 
     APR_BRIGADE_INSERT_TAIL(bb, apr_bucket_pipe_create(tempsock,
                             f->c->bucket_alloc));
