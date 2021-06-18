@@ -529,7 +529,11 @@ static int ssl_hook_Access_classic(request_rec *r, SSLSrvConfigRec *sc, SSLDirCo
     X509 *peercert;
     X509_STORE *cert_store = NULL;
     X509_STORE_CTX *cert_store_ctx;
+#if HAVE_SSLPROC
+    STACK_OF(PSSL_CIPHER) *cipher_list_old = NULL, *cipher_list = NULL;
+#else
     STACK_OF(SSL_CIPHER) *cipher_list_old = NULL, *cipher_list = NULL;
+#endif
     const SSL_CIPHER *cipher = NULL;
     int depth, verify_old, verify, n, rc;
     const char *ncipher_suite;
@@ -601,7 +605,11 @@ static int ssl_hook_Access_classic(request_rec *r, SSLSrvConfigRec *sc, SSLDirCo
             cipher = SSL_get_current_cipher(ssl);
         }
         else {
+#if HAVE_SSLPROC
+            cipher_list_old = (STACK_OF(PSSL_CIPHER) *)SSL_get_ciphers(ssl);
+#else
             cipher_list_old = (STACK_OF(SSL_CIPHER) *)SSL_get_ciphers(ssl);
+#endif
 
             if (cipher_list_old) {
                 cipher_list_old = sk_SSL_CIPHER_dup(cipher_list_old);
@@ -634,7 +642,11 @@ static int ssl_hook_Access_classic(request_rec *r, SSLSrvConfigRec *sc, SSLDirCo
         }
 
         /* determine whether a renegotiation has to be forced */
+#if HAVE_SSLPROC
+        cipher_list = (STACK_OF(PSSL_CIPHER) *)SSL_get_ciphers(ssl);
+#else
         cipher_list = (STACK_OF(SSL_CIPHER) *)SSL_get_ciphers(ssl);
+#endif
 
         if (dc->nOptions & SSL_OPT_OPTRENEGOTIATE) {
             /* optimized way */
