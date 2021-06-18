@@ -37,6 +37,10 @@
 #define OPENSSL_NO_SSL_INTERN
 #endif
 #include <openssl/ssl.h>
+#if HAVE_SSLPROC
+#include <sslproc.h>
+#include <sslproc_namespace.h>
+#endif
 #endif
 
 /**

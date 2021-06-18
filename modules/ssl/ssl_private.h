@@ -106,6 +106,11 @@
 #include <openssl/engine.h>
 #endif
 
+#if HAVE_SSLPROC
+#include <sslproc.h>
+#include <sslproc_namespace.h>
+#endif
+
 #if (OPENSSL_VERSION_NUMBER < 0x0090801f)
 #error mod_ssl requires OpenSSL 0.9.8a or later
 #endif
