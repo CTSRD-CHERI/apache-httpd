@@ -603,6 +603,13 @@ AC_DEFUN([APACHE_CHECK_OPENSSL],[
   ])
   if test "x$ac_cv_openssl" = "xyes"; then
     AC_DEFINE(HAVE_OPENSSL, 1, [Define if OpenSSL is available])
+
+    AC_ARG_WITH(sslproc, APACHE_HELP_STRING(--with-sslproc=PATH,Use OpenSSL proxy library), [
+      dnl Replace -lssl with -lsslproc
+      ap_openssl_mod_ldflags=$(echo $ap_openssl_mod_ldflags | sed -e 's/\-lssl/-lsslproc/')
+      AC_DEFINE(HAVE_SSLPROC, 1, [Define if OpenSSL proxy is available])
+    ])
+
     APR_ADDTO(MOD_LDFLAGS, [$ap_openssl_mod_ldflags])
     APR_ADDTO(MOD_CFLAGS, [$ap_openssl_mod_cflags])
   fi
