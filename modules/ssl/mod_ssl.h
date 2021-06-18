@@ -51,6 +51,11 @@
 #define SSL_DECLARE_NONSTD(type)     __declspec(dllimport) type
 #define SSL_DECLARE_DATA             __declspec(dllimport)
 #endif
+#if HAVE_SSLPROC
+#define PSSL_DECLARE                 SSL_DECLARE
+#define PSSL_DECLARE_NONSTD          SSL_DECLARE_NONSTD
+#define PSSL_DECLARE_DATA            SSL_DECLARE_DATA
+#endif
 
 /** The ssl_var_lookup() optional function retrieves SSL environment
  * variables. */
